@@ -1,0 +1,25 @@
+#!/bin/zsh
+
+# We need to dynamically replace banditX-1 and banditX with a user input
+# sshpass -p `cat banditX-1` ssh `banditX`@bandit.labs.overthewire.org -p 2220
+
+# Working Example
+# sshpass -p `cat bandit0` ssh bandit0@bandit.labs.overthewire.org -p 2220
+
+# check for a command line argument
+if [ -z $1 ]; then
+    echo "Need to give the bandit level you want to connect to"
+    exit 0
+else
+    # gets banditX-1
+    prev=$[${1:6}-1]
+    file="bandit$prev"
+
+    # check if the password file exists
+    if test -f "$file"; then
+        # you need to echo the user of the ssh
+        sshpass -p `cat $file` ssh `echo $1@bandit.labs.overthewire.org -p 2220`
+    else
+        echo "password file for $1 does not exist"
+    fi
+fi
